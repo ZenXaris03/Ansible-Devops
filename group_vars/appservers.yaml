@@ -1,0 +1,8 @@
+appdir: "{{ ansible_user_dir }}/spring"
+branch: "api"
+appuser: "{{ansible_user_id}}"
+appgroup: "{{ansible_user_gid}}"
+app_port: 9090
+backend_server_url: "http://34.78.196.247:9090" #backend-vm ip
+app:
+  VITE_BACKEND:  http://35.195.103.124 #frontend-vm ip
