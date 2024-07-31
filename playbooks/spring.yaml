@@ -40,11 +40,6 @@
         args:
             chdir: "{{ appdir }}"
 
-#      - name: "Run the Spring application"
-#        command: "java -jar target/springbootdemo-0.0.1-SNAPSHOT.jar"
-#        args:
-#            chdir: "{{ appdir }}"
-
       - name: copy spring service file
         template:
           src: ../files/spring.service.j2

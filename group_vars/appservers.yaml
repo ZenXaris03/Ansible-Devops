@@ -3,6 +3,6 @@ branch: "main"
 appuser: "{{ansible_user_id}}"
 appgroup: "{{ansible_user_gid}}"
 app_port: 9090
-backend_server_url: "http://34.140.129.200:80" #backend-vm ip
+backend_server_url: "http://34.34.178.47:80" #backend-vm ip
 app:
   VITE_BACKEND:  http://34.38.15.180 #frontend-vm ip
