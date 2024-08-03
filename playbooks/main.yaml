@@ -1,9 +1,14 @@
 - name: Run all playbooks
   hosts: localhost
   tasks:
+
+    - name: Determine project directory
+      set_fact:
+        project_dir: "{{ playbook_dir | dirname }}"
+
     - name: Run Postgres playbook on azure-db-server
       shell: |
-        cd /home/alexandros/Ansible-Devops 
+        cd {{project_dir}} 
         ansible-playbook playbooks/postgres.yaml -l azure-db-server
       register: postgres_output
       ignore_errors: no
@@ -14,7 +19,7 @@
 
     - name: Run Spring playbook on gcloud-app-server
       shell: |
-        cd /home/alexandros/Ansible-Devops
+        cd {{project_dir}} 
         ansible-playbook playbooks/spring.yaml -l gcloud-app-server
       register: spring_output
       ignore_errors: no
@@ -25,7 +30,7 @@
 
     - name: Run Vue.js playbook on frontend-vm
       shell: |
-        cd /home/alexandros/Ansible-Devops
+        cd {{project_dir}} 
         ansible-playbook playbooks/vuejs.yaml -l frontend-vm
       register: vuejs_output
       ignore_errors: no
@@ -33,8 +38,3 @@
     - name: Show Vue.js playbook output
       debug:
         var: vuejs_output.stdout
-
-
-
-
-
