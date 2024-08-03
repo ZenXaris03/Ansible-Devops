@@ -1,0 +1,40 @@
+- name: Run all playbooks
+  hosts: localhost
+  tasks:
+    - name: Run Postgres playbook on azure-db-server
+      shell: |
+        cd /home/alexandros/Ansible-Devops 
+        ansible-playbook playbooks/postgres.yaml -l azure-db-server
+      register: postgres_output
+      ignore_errors: no
+
+    - name: Show Postgres playbook output
+      debug:
+        var: postgres_output.stdout
+
+    - name: Run Spring playbook on gcloud-app-server
+      shell: |
+        cd /home/alexandros/Ansible-Devops
+        ansible-playbook playbooks/spring.yaml -l gcloud-app-server
+      register: spring_output
+      ignore_errors: no
+
+    - name: Show Spring playbook output
+      debug:
+        var: spring_output.stdout
+
+    - name: Run Vue.js playbook on frontend-vm
+      shell: |
+        cd /home/alexandros/Ansible-Devops
+        ansible-playbook playbooks/vuejs.yaml -l frontend-vm
+      register: vuejs_output
+      ignore_errors: no
+
+    - name: Show Vue.js playbook output
+      debug:
+        var: vuejs_output.stdout
+
+
+
+
+
