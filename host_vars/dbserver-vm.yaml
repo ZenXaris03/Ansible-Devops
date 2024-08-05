@@ -1,4 +1,0 @@
-db:
-  name: "farmers" # our db name
-  user: "appuser"
-  password: "apppassword"
