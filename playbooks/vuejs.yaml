@@ -2,6 +2,7 @@
 - hosts: appservers
 
   vars:
+  
       frontendappdir: "{{ ansible_user_dir }}/frontend"
       branch: "main"
       site_location: /var/www/vue
@@ -56,9 +57,8 @@
         state: latest
       become: yes
 
-
-
   tasks:
+
     - name: "Clone the Vue repository"
       git:
           repo: "https://github.com/AlexandrosManolis/farmerCompensationFrontend.git"
@@ -122,6 +122,7 @@
       notify: restart nginx
     
   handlers:
+
     - name: restart nginx
       service:
         name: nginx

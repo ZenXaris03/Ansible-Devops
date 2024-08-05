@@ -24,14 +24,6 @@ ansible -m ping all
 ansible -m ping all <group-name>
 ```
 
-# Run development environment with Vagrant
-* run testing environment
-```bash
-vagrant plugin install vagrant-hostmanager
-cd vagrant
-vagrunt up
-vagrant ssh-config >> ~/.ssh/config
-```
 * run a playbook
 ```bash
 ansible-playbook -l dbserver-vm playbooks/postgres.yaml

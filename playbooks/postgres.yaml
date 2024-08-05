@@ -3,8 +3,8 @@
   become: yes
   become_user: root
 
-
   pre_tasks:
+
     - name: Install the PostgreSQL package
       apt:
         name: ["postgresql-contrib", "postgresql-client"]
@@ -25,6 +25,7 @@
         - psycopg2-binary
 
   tasks:
+
     - name: check if postgres is initialized
       ansible.builtin.stat:
         path: /var/lib/postgresql/14/main
@@ -52,7 +53,6 @@
         name: "{{ db.name }}"
       become: yes
       become_user: postgres
-
 
     - name: "Create db user"
       postgresql_user:

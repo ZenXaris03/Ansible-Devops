@@ -2,6 +2,7 @@
 - hosts: all
 
   pre_tasks:
+
     - name: Install Java
       apt:
           name: openjdk-21-jdk
@@ -10,6 +11,7 @@
       become: yes
 
   tasks:
+
       - name: "debug appdir"
         ansible.builtin.debug:
           msg: "appdir {{ansible_user_dir}}"
@@ -89,6 +91,7 @@
         notify: restart nginx
 
   handlers:
+  
   - name: restart spring
     service:
       name: spring

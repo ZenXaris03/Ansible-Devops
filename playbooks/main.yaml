@@ -1,5 +1,7 @@
+---
 - name: Run all playbooks
   hosts: localhost
+  
   tasks:
 
     - name: Determine project directory

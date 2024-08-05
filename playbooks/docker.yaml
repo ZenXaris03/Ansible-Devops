@@ -1,7 +1,9 @@
 ---
 - hosts: all
   become: yes
+  
   tasks:
+  
     - name: Install basic packages
       apt:
         name: "{{item}}"
