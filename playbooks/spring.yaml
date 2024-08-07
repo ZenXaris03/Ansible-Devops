@@ -32,11 +32,6 @@
         with_items:
           - "{{app.env | dict2items}}"
 
-      - name: "Ensure mvnw is executable"
-        command: "chmod +x mvnw"
-        args:
-            chdir: "{{ appdir }}"
-
       - name: "Build the Spring application"
         command: "./mvnw package -Dmaven.test.skip "
         args:
