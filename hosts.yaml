@@ -11,3 +11,8 @@ dbservers:
     hosts:
       azure-db-server:
           ansible_host: database-azure
+
+dockerservers:
+    hosts:
+      docker-server:
+          ansible_host: docker-gcloud
