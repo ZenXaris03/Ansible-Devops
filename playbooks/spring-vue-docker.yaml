@@ -12,18 +12,16 @@
       set_fact:
         docker_installed: "{{ docker_version_result.rc == 0 }}"
 
-    # May not work right due to hosts
-    - name: Run docker playbook if Docker is not installed
-      shell: |
-        cd {{project_dir}} 
-        ansible-playbook playbooks/docker.yaml
+    - name: Include and run the Docker playbook if Docker is not installed
+      import_tasks: docker.yaml
       when: not docker_installed
-      register: docker_playbook_output
+      register: docker_output
       ignore_errors: no
-
-    - name: Show docker playbook output
+      
+    - name: Show Docker playbook output
       debug:
-        var: docker_playbook_output.stdout
+        var: docker_output.stdout
+      when: not docker_installed
 
     - name: "Clone the Spring repository"
       git:
