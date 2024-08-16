@@ -11,6 +11,23 @@
       become: yes
 
   tasks:
+      - name: Find my public ip
+        uri:
+          url: http://ifconfig.me/ip
+          return_content: yes
+        register: ip_response
+      
+      - name: Replace db_ip in host_vars/gcloud-app-server.yaml
+        delegate_to: localhost
+        lineinfile:
+          path: "{{playbook_dir | dirname}}/group_vars/appservers.yaml"
+          state: present
+          regexp: '^(\s*)backend_server_url:.*'
+          line:  'backend_server_url: "http://{{ip_response.content}}:80" #backend_vm ip'
+      
+      - name: Reload appservers variables
+        include_vars:
+          file: "{{ playbook_dir | dirname }}/group_vars/appservers.yaml"
 
       - name: "debug appdir"
         ansible.builtin.debug:
@@ -22,6 +39,20 @@
             dest: "{{ appdir }}"
             version: "{{ branch }}"
             force: yes
+      
+      - name: Replace db_ip in host_vars/gcloud-app-server.yaml
+        delegate_to: localhost
+        lineinfile:
+          path: "{{playbook_dir | dirname}}/host_vars/gcloud-app-server.yaml"
+          state: present
+          regexp: '^(\s*)spring.datasource.url:.*'
+          line:  "    spring.datasource.url: jdbc:postgresql://{{ db_ip }}:5432/farmers"
+        vars:
+          db_ip: "{{ lookup('pipe', \"grep -A3 'Host database-azure' ~/.ssh/config | grep Hostname | awk '{print $2}'\") }}"
+      
+      - name: Reload app.env variables
+        include_vars:
+          file: "{{ playbook_dir | dirname }}/host_vars/gcloud-app-server.yaml"
 
       - name: "Populate application.properties"
         lineinfile:

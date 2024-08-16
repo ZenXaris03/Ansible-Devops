@@ -15,6 +15,11 @@
         return_content: yes
       register: ip_response
 
+    - name: Set global fact for IP response
+      set_fact:
+        app: 
+          VITE_BACKEND: "http://{{ ip_response.content }}"
+
     - name: See public ip
       debug:
         var: ip_response.content
