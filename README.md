@@ -15,27 +15,33 @@ webserver: # <-- group
   vars:  # <-- common variables in this group
     ansible_python_interpreter: /usr/bin/python3
 ```
-* to test if all hosts are accesible, run
+* to test if all hosts are accesible, run:
 ```bash
 ansible -m ping all
 ```
-* to test if a group of hosts are accesible, run
+* to test if a group of hosts are accesible, run:
 ```bash
 ansible -m ping all <group-name>
 ```
 
-* run a playbook
+* to start the application on 3 separated vms run those playbooks in order:
 ```bash
-ansible-playbook -l dbserver-vm playbooks/postgres.yaml
-
 ansible-playbook playbooks/postgres.yaml -l azure-db-server
-
+```
+```bash
 ansible-playbook playbooks/spring.yaml -l gcloud-app-server
-
+```
+```bash
 ansible-playbook playbooks/vuejs.yaml -l frontend-vm
+```
 
+* or run this playbook that includes all the above:
+```bash
 ansible-playbook playbooks/main.yaml
+```
 
+* run application with docker-compose in a vm:
+```bash
 ansible-playbook playbooks/spring-vue-docker.yaml -l docker-server
 ```
 
@@ -49,7 +55,7 @@ ansible-playbook -l <hostname> playbooks/hostvars_and_facts.yml
 ```
 
 ## postgres from ansible-galaxy
-install postgresql role
+install postgresql role:
 ```bash
 ansible-galaxy install geerlingguy.postgresql
 ```
