@@ -17,7 +17,7 @@
           return_content: yes
         register: ip_response
       
-      - name: Replace db_ip in host_vars/gcloud-app-server.yaml
+      - name: Replace backend ip in group_vars/appservers.yaml
         delegate_to: localhost
         lineinfile:
           path: "{{playbook_dir | dirname}}/group_vars/appservers.yaml"
@@ -40,7 +40,7 @@
             version: "{{ branch }}"
             force: yes
       
-      - name: Replace db_ip in host_vars/gcloud-app-server.yaml
+      - name: Replace db ip in host_vars/gcloud-app-server.yaml
         delegate_to: localhost
         lineinfile:
           path: "{{playbook_dir | dirname}}/host_vars/gcloud-app-server.yaml"
@@ -50,6 +50,14 @@
         vars:
           db_ip: "{{ lookup('pipe', \"grep -A3 'Host database-azure' ~/.ssh/config | grep Hostname | awk '{print $2}'\") }}"
       
+      - name: Replace mail host ip in host_vars/gcloud-app-server.yaml
+        delegate_to: localhost
+        lineinfile:
+          path: "{{playbook_dir | dirname}}/host_vars/gcloud-app-server.yaml"
+          state: present
+          regexp: '^(\s*)spring.mail.host:.*'
+          line:  "    spring.mail.host: {{ ip_response.content }}"
+
       - name: Reload app.env variables
         include_vars:
           file: "{{ playbook_dir | dirname }}/host_vars/gcloud-app-server.yaml"
