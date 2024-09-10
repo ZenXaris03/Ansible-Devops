@@ -16,6 +16,49 @@
           url: http://ifconfig.me/ip
           return_content: yes
         register: ip_response
+
+      - name: Install MailHog binary
+        get_url:
+          url: https://github.com/mailhog/MailHog/releases/download/v1.0.1/MailHog_linux_amd64
+          dest: /usr/local/bin/mailhog
+          mode: '0755'
+        become: yes
+
+      - name: Install mhsendmail binary
+        get_url:
+          url: https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64
+          dest: /usr/local/bin/mhsendmail
+          mode: '0755'
+        become: yes
+
+      - name: Create MailHog service
+        copy:
+          dest: /etc/systemd/system/mailhog.service
+          content: |
+            [Unit]
+            Description=MailHog Service
+            After=network.target
+
+            [Service]
+            ExecStart=/usr/local/bin/mailhog
+            Restart=always
+            User=nobody
+            Group=nogroup
+
+            [Install]
+            WantedBy=multi-user.target
+        become: yes
+
+      - name: Reload systemd to pick up new MailHog service
+        command: systemctl daemon-reload
+        become: yes
+
+      - name: Start MailHog service
+        service:
+          name: mailhog
+          state: started
+          enabled: yes
+        become: yes
       
       - name: Replace backend ip in group_vars/appservers.yaml
         delegate_to: localhost
