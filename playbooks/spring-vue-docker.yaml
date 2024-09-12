@@ -43,57 +43,57 @@
         project_src: "{{ appdir }}"
         state: absent
 
-    - name: Install MailHog binary
-      get_url:
-          url: https://github.com/mailhog/MailHog/releases/download/v1.0.1/MailHog_linux_amd64
-          dest: /usr/local/bin/mailhog
-          mode: '0755'
-      become: yes
+    # - name: Install MailHog binary
+    #   get_url:
+    #       url: https://github.com/mailhog/MailHog/releases/download/v1.0.1/MailHog_linux_amd64
+    #       dest: /usr/local/bin/mailhog
+    #       mode: '0755'
+    #   become: yes
 
-    - name: Install mhsendmail binary
-      get_url:
-          url: https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64
-          dest: /usr/local/bin/mhsendmail
-          mode: '0755'
-      become: yes
+    # - name: Install mhsendmail binary
+    #   get_url:
+    #       url: https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64
+    #       dest: /usr/local/bin/mhsendmail
+    #       mode: '0755'
+    #   become: yes
 
-    - name: Create MailHog service
-      copy:
-          dest: /etc/systemd/system/mailhog.service
-          content: |
-            [Unit]
-            Description=MailHog Service
-            After=network.target
+    # - name: Create MailHog service
+    #   copy:
+    #       dest: /etc/systemd/system/mailhog.service
+    #       content: |
+    #         [Unit]
+    #         Description=MailHog Service
+    #         After=network.target
 
-            [Service]
-            ExecStart=/usr/local/bin/mailhog
-            Restart=always
-            User=nobody
-            Group=nogroup
+    #         [Service]
+    #         ExecStart=/usr/local/bin/mailhog
+    #         Restart=always
+    #         User=nobody
+    #         Group=nogroup
 
-            [Install]
-            WantedBy=multi-user.target
-      become: yes
+    #         [Install]
+    #         WantedBy=multi-user.target
+    #   become: yes
 
-    - name: Reload systemd to pick up new MailHog service
-      command: systemctl daemon-reload
-      become: yes
+    # - name: Reload systemd to pick up new MailHog service
+    #   command: systemctl daemon-reload
+    #   become: yes
 
-    - name: Start MailHog service
-      service:
-          name: mailhog
-          state: started
-          enabled: yes
-      become: yes
+    # - name: Start MailHog service
+    #   service:
+    #       name: mailhog
+    #       state: started
+    #       enabled: yes
+    #   become: yes
 
-    # Use the public IP of the VM for the mail host in the Spring application
-    - name: Set spring.mail.host to the public IP of the VM in application.properties
-      lineinfile:
-        path: "{{ appdir }}/src/main/resources/application.properties"
-        regexp: '^spring.mail.host=.*'
-        line: "spring.mail.host={{ ip_response.content }}"
-        create: yes
-      notify: Restart Docker Compose
+    # # Use the public IP of the VM for the mail host in the Spring application
+    # - name: Set spring.mail.host to the public IP of the VM in application.properties
+    #   lineinfile:
+    #     path: "{{ appdir }}/src/main/resources/application.properties"
+    #     regexp: '^spring.mail.host=.*'
+    #     line: "spring.mail.host={{ ip_response.content }}"
+    #     create: yes
+    #   notify: Restart Docker Compose
 
     - name: Create and start services
       docker_compose:
