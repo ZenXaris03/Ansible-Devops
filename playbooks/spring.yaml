@@ -40,7 +40,7 @@
             After=network.target
 
             [Service]
-            ExecStart=/usr/local/bin/mailhog -b 0.0.0.0
+            ExecStart=/usr/local/bin/mailhog
             Restart=always
             User=nobody
             Group=nogroup
