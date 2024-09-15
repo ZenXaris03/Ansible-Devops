@@ -40,7 +40,7 @@
             After=network.target
 
             [Service]
-            ExecStart=/usr/local/bin/mailhog
+            ExecStart=/usr/local/bin/mailhog -b 0.0.0.0
             Restart=always
             User=nobody
             Group=nogroup
@@ -56,7 +56,7 @@
       - name: Start MailHog service
         service:
           name: mailhog
-          state: started
+          state: restarted
           enabled: yes
         become: yes
       
