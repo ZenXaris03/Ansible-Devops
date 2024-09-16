@@ -50,7 +50,6 @@
         become: yes
 
       - name: Modify MailHog service to bind to public IP (0.0.0.0)
-        when: mailhog_service_file.stat.exists
         lineinfile:
           path: /etc/systemd/system/mailhog.service
           regexp: '^ExecStart='
