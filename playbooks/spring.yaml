@@ -33,7 +33,7 @@
             After=network.target
 
             [Service]
-            ExecStart=/usr/local/bin/mailhog
+            ExecStart=/usr/local/bin/mailhog -ui-bind-addr 127.0.0.1:8025 -api-bind-addr 127.0.0.1:8025 -smtp-bind-addr 127.0.0.1:1025
             Restart=always
             User=nobody
             Group=nogroup
@@ -49,7 +49,7 @@
       - name: Start MailHog service
         service:
           name: mailhog
-          state: started
+          state: restarted
           enabled: yes
         become: yes
       
