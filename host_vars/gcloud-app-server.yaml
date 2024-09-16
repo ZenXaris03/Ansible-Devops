@@ -4,7 +4,7 @@ app:
     spring.datasource.username: appuser
     spring.datasource.password: apppassword
     spring.datasource.url: ""
-    # spring.mail.host: localhost
+    spring.mail.host: localhost
 
 service:
   workingdir: "{{ ansible_user_dir }}/backend"
