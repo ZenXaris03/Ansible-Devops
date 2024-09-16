@@ -119,7 +119,7 @@
           dest: "{{ appdir }}/src/main/java/gr.hua.dit.farmerCompensation/config/MailConfig.java"
           state: present
           regexp: '^(\s*)mailSender.setHost.*'
-          line: "        mailSender.setHost({{ip_response.content}});"
+          line: '        mailSender.setHost("{{ip_response.content}}");'
 
       - name: "Build the Spring application"
         command: "./mvnw package -Dmaven.test.skip "
