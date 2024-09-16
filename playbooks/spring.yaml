@@ -49,6 +49,16 @@
             WantedBy=multi-user.target
         become: yes
 
+      - name: Modify MailHog service to bind to public IP (0.0.0.0)
+        when: mailhog_service_file.stat.exists
+        lineinfile:
+          path: /etc/systemd/system/mailhog.service
+          regexp: '^ExecStart='
+          line: 'ExecStart=/usr/local/bin/MailHog -ui-bind-addr 0.0.0.0:8025 -api-bind-addr 0.0.0.0:8025'
+          state: present
+          backup: yes
+        become: yes
+
       - name: Reload systemd to pick up new MailHog service
         command: systemctl daemon-reload
         become: yes
