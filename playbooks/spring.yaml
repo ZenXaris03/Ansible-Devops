@@ -46,15 +46,16 @@
         notify:
           - Restart MailHog
 
-      - name: Reload systemd to pick up new service file
-        systemd:
-          daemon_reload: yes
+      - name: Reload systemd to pick up new MailHog service
+        command: systemctl daemon-reload
+        become: yes
 
       - name: Start MailHog service
-        systemd:
+        service:
           name: mailhog
           state: started
           enabled: yes
+        become: yes
       
       - name: Replace backend ip in group_vars/appservers.yaml
         delegate_to: localhost
