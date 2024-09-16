@@ -49,14 +49,14 @@
             WantedBy=multi-user.target
         become: yes
 
-      - name: Modify MailHog service to bind to public IP (0.0.0.0)
-        lineinfile:
-          path: /etc/systemd/system/mailhog.service
-          regexp: '^ExecStart='
-          line: 'ExecStart=/usr/local/bin/mailhog -ui-bind-addr 0.0.0.0:8025 -api-bind-addr 0.0.0.0:8025 -smtp-bind-addr 0.0.0.0:1025'
-          state: present
-          backup: yes
-        become: yes
+      # - name: Modify MailHog service to bind to public IP (0.0.0.0)
+      #   lineinfile:
+      #     path: /etc/systemd/system/mailhog.service
+      #     regexp: '^ExecStart='
+      #     line: 'ExecStart=/usr/local/bin/mailhog -ui-bind-addr 0.0.0.0:8025 -api-bind-addr 0.0.0.0:8025 -smtp-bind-addr 0.0.0.0:1025'
+      #     state: present
+      #     backup: yes
+      #   become: yes
 
       - name: Reload systemd to pick up new MailHog service
         command: systemctl daemon-reload
@@ -102,13 +102,13 @@
         vars:
           db_ip: "{{ lookup('pipe', \"grep -A3 'Host database-azure' ~/.ssh/config | grep Hostname | awk '{print $2}'\") }}"
       
-      - name: Replace mail host ip in host_vars/gcloud-app-server.yaml
-        delegate_to: localhost
-        lineinfile:
-          path: "{{playbook_dir | dirname}}/host_vars/gcloud-app-server.yaml"
-          state: present
-          regexp: '^(\s*)spring.mail.host:.*'
-          line:  "    spring.mail.host: {{ ip_response.content }}"
+      # - name: Replace mail host ip in host_vars/gcloud-app-server.yaml
+      #   delegate_to: localhost
+      #   lineinfile:
+      #     path: "{{playbook_dir | dirname}}/host_vars/gcloud-app-server.yaml"
+      #     state: present
+      #     regexp: '^(\s*)spring.mail.host:.*'
+      #     line:  "    spring.mail.host: {{ ip_response.content }}"
 
       - name: Reload app.env variables
         include_vars:
@@ -123,12 +123,12 @@
         with_items:
           - "{{app.env | dict2items}}"
 
-      - name: "Replace mailhog public ip on MailConfig"
-        lineinfile:
-          dest: "{{ appdir }}/src/main/java/gr.hua.dit.farmerCompensation/config/MailConfig.java"
-          state: present
-          regexp: '^(\s*)mailSender.setHost.*'
-          line: '        mailSender.setHost("{{ip_response.content}}");'
+      # - name: "Replace mailhog public ip on MailConfig"
+      #   lineinfile:
+      #     dest: "{{ appdir }}/src/main/java/gr.hua.dit.farmerCompensation/config/MailConfig.java"
+      #     state: present
+      #     regexp: '^(\s*)mailSender.setHost.*'
+      #     line: '        mailSender.setHost("{{ip_response.content}}");'
 
       - name: "Build the Spring application"
         command: "./mvnw package -Dmaven.test.skip "
