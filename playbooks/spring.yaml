@@ -114,6 +114,13 @@
         with_items:
           - "{{app.env | dict2items}}"
 
+      - name: "Replace mailhog public ip on MailConfig"
+        lineinfile:
+          dest: "{{ appdir }}/src/main/java/gr.hua.dit.farmerCompensation/config/MailConfig.java"
+          state: present
+          regexp: '^(\s*)mailSender.setHost.*'
+          line: "        mailSender.setHost({{ip_response.content}});"
+
       - name: "Build the Spring application"
         command: "./mvnw package -Dmaven.test.skip "
         args:
