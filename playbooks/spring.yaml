@@ -37,7 +37,7 @@
             After=network.target
 
             [Service]
-            ExecStart=/usr/local/bin/mailhog -ui-bind-addr {{ internal_ip_response.stdout }}:8025 -api-bind-addr {{ internal_ip_response.stdout }}:8025 -smtp-bind-addr {{ internal_ip_response.stdout }}:1025
+            ExecStart=/usr/local/bin/mailhog -ui-bind-addr 0.0.0.0:8025 -api-bind-addr 0.0.0.0:8025 -smtp-bind-addr 0.0.0.0:1025
             Restart=always
             User=nobody
             Group=nogroup
