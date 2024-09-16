@@ -16,6 +16,10 @@
           url: http://ifconfig.me/ip
           return_content: yes
         register: ip_response
+      
+      - name: Find internal ip of gcloud
+        command: 'curl "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip" -H "Metadata-Flavor: Google"'
+        register: internal_ip_response
 
       - name: Install MailHog binary
         get_url:
@@ -33,7 +37,7 @@
             After=network.target
 
             [Service]
-            ExecStart=/usr/local/bin/mailhog -ui-bind-addr 146.148.15.10:8025 -api-bind-addr 146.148.15.10:8025 -smtp-bind-addr 146.148.15.10:1025
+            ExecStart=/usr/local/bin/mailhog -ui-bind-addr {{ internal_ip_response.stdout }}:8025 -api-bind-addr {{ internal_ip_response.stdout }}:8025 -smtp-bind-addr {{ internal_ip_response.stdout }}:1025
             Restart=always
             User=nobody
             Group=nogroup
